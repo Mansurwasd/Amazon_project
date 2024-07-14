@@ -7,8 +7,13 @@ loadProducts(renderProductsGrid);
 function renderProductsGrid() {
   let productsHTML = '';
 
+  const url = new URL(window.location.href);
+  const someShitInHREF = url.searchParams.get('search') || '';
+  console.log(someShitInHREF);
+
   products.forEach((product) => {
-    productsHTML += `
+    if (((product.name).toUpperCase()).includes((someShitInHREF).toUpperCase())) {
+      productsHTML += `
       <div class="product-container">
         <div class="product-image-container">
           <img class="product-image"
@@ -61,6 +66,7 @@ function renderProductsGrid() {
         </button>
       </div>
     `;
+    };
   });
 
   document.querySelector('.js-products-grid').innerHTML = productsHTML;
@@ -85,3 +91,6 @@ function renderProductsGrid() {
       });
     });
 }
+document.querySelector('.search-button').addEventListener('click', () => {
+  window.location.href = `amazon.html?search=${document.querySelector('.search-bar').value}`
+})
