@@ -1,18 +1,17 @@
-import {cart, addToCart} from '../data/cart.js';
-import {products, loadProducts} from '../data/products.js';
-import {formatCurrency} from './utils/money.js';
+import { cart, addToCart } from "../data/cart.js";
+import { products, loadProducts } from "../data/products.js";
 
 loadProducts(renderProductsGrid);
 
 function renderProductsGrid() {
-  let productsHTML = '';
+  let productsHTML = "";
 
   const url = new URL(window.location.href);
-  const someShitInHREF = url.searchParams.get('search') || '';
-  console.log(someShitInHREF);
+  const HREF = url.searchParams.get("search") || "";
+  console.log(HREF);
 
   products.forEach((product) => {
-    if (((product.name).toUpperCase()).includes((someShitInHREF).toUpperCase())) {
+    if (product.name.toUpperCase().includes(HREF.toUpperCase())) {
       productsHTML += `
       <div class="product-container">
         <div class="product-image-container">
@@ -66,10 +65,10 @@ function renderProductsGrid() {
         </button>
       </div>
     `;
-    };
+    }
   });
 
-  document.querySelector('.js-products-grid').innerHTML = productsHTML;
+  document.querySelector(".js-products-grid").innerHTML = productsHTML;
 
   function updateCartQuantity() {
     let cartQuantity = 0;
@@ -78,19 +77,17 @@ function renderProductsGrid() {
       cartQuantity += cartItem.quantity;
     });
 
-    document.querySelector('.js-cart-quantity')
-      .innerHTML = cartQuantity;
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
   }
 
-  document.querySelectorAll('.js-add-to-cart')
-    .forEach((button) => {
-      button.addEventListener('click', () => {
-        const productId = button.dataset.productId;
-        addToCart(productId);
-        updateCartQuantity();
-      });
+  document.querySelectorAll(".js-add-to-cart").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.dataset.productId;
+      addToCart(productId);
+      updateCartQuantity();
     });
+  });
 }
-document.querySelector('.search-button').addEventListener('click', () => {
-  window.location.href = `amazon.html?search=${document.querySelector('.search-bar').value}`
-})
+document.querySelector(".search-button").addEventListener("click", () => {
+  window.location.href = `amazon.html?search=${document.querySelector(".search-bar").value}`;
+});

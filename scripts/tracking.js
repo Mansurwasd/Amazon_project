@@ -1,47 +1,49 @@
-import {orders} from '../data/orders.js';
-import {products, loadProductsFetch} from '../data/products.js';
-import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+import { orders } from "../data/orders.js";
+import { products, loadProductsFetch } from "../data/products.js";
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 
 const url = new URL(window.location.href);
-const orderId = url.searchParams.get('orderId');
-const detailProductId = url.searchParams.get('detailProductId');
+const orderId = url.searchParams.get("orderId");
+const detailProductId = url.searchParams.get("detailProductId");
 
-let trackingQuantity = '';
-let trackingEstimatedDeliveryTime = '';
-let orderTime = '';
-let deliveryTime = '';
+let trackingQuantity = "";
+let trackingEstimatedDeliveryTime = "";
+let orderTime = "";
+let deliveryTime = "";
 
 orders.forEach((order) => {
-    if (order.id === orderId) {
-        orderTime = dayjs(order.orderTime);
-        (order.products).forEach((detail) => {
-            if (detail.productId === detailProductId) {
-                return trackingQuantity = detail.quantity,
-                deliveryTime = dayjs(detail.estimatedDeliveryTime),
-                trackingEstimatedDeliveryTime = dayjs(detail.estimatedDeliveryTime).format('dddd, MMMM D');
-                
-            };
-        });
-    };
+  if (order.id === orderId) {
+    orderTime = dayjs(order.orderTime);
+    order.products.forEach((detail) => {
+      if (detail.productId === detailProductId) {
+        return (
+          (trackingQuantity = detail.quantity),
+          (deliveryTime = dayjs(detail.estimatedDeliveryTime)),
+          (trackingEstimatedDeliveryTime = dayjs(
+            detail.estimatedDeliveryTime,
+          ).format("dddd, MMMM D"))
+        );
+      }
+    });
+  }
 });
 
 let trackingIMG;
 let trackingName;
 
 const currentTime = dayjs();
-const greenBar = ((currentTime-orderTime)/(deliveryTime-orderTime))*100;
+const greenBar = ((currentTime - orderTime) / (deliveryTime - orderTime)) * 100;
 
 async function generateTrackingPage() {
-    await loadProductsFetch();
-    
-    products.forEach((product) => {
-        if (product.id === detailProductId) {
-            return trackingIMG = product.image,
-            trackingName = product.name;
-        };
-    });
+  await loadProductsFetch();
 
-    document.querySelector('.order-tracking').innerHTML = `
+  products.forEach((product) => {
+    if (product.id === detailProductId) {
+      return ((trackingIMG = product.image), (trackingName = product.name));
+    }
+  });
+
+  document.querySelector(".order-tracking").innerHTML = `
         <a class="back-to-orders-link link-primary" href="orders.html">
           View all orders
         </a>
@@ -75,18 +77,14 @@ async function generateTrackingPage() {
         <div class="progress-bar-container">
           <div class="progress-bar" style="width:${greenBar}%"></div>
         </div>`;
-    
-    if (greenBar <= 49) {
-        document.querySelector('.js-preparing').classList.add('current-status');
-    } else if (greenBar >= 50 && greenBar <= 99) {
-        document.querySelector('.js-shipped').classList.add('current-status');
-    } else {
-        document.querySelector('.js-delivered').classList.add('current-status');
-    }
-};
 
-generateTrackingPage()
+  if (greenBar <= 49) {
+    document.querySelector(".js-preparing").classList.add("current-status");
+  } else if (greenBar >= 50 && greenBar <= 99) {
+    document.querySelector(".js-shipped").classList.add("current-status");
+  } else {
+    document.querySelector(".js-delivered").classList.add("current-status");
+  }
+}
 
-
-
-
+generateTrackingPage();
