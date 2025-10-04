@@ -1,6 +1,5 @@
 import {cart, addToCart} from '../data/cart.js';
 import {products, loadProducts} from '../data/products.js';
-import {formatCurrency} from './utils/money.js';
 
 loadProducts(renderProductsGrid);
 
@@ -8,11 +7,11 @@ function renderProductsGrid() {
   let productsHTML = '';
 
   const url = new URL(window.location.href);
-  const someShitInHREF = url.searchParams.get('search') || '';
-  console.log(someShitInHREF);
+  const HREF = url.searchParams.get('search') || '';
+  console.log(HREF);
 
   products.forEach((product) => {
-    if (((product.name).toUpperCase()).includes((someShitInHREF).toUpperCase())) {
+    if (((product.name).toUpperCase()).includes((HREF).toUpperCase())) {
       productsHTML += `
       <div class="product-container">
         <div class="product-image-container">

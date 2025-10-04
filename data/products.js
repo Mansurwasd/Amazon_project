@@ -1,4 +1,4 @@
-import {formatCurrency} from '../scripts/utils/money.js';
+import { formatCurrency } from "../scripts/utils/money.js";
 
 export function getProduct(productId) {
   let matchingProduct;
@@ -36,7 +36,7 @@ class Product {
   }
 
   extraInfoHTML() {
-    return '';
+    return "";
   }
 }
 
@@ -60,22 +60,23 @@ class Clothing extends Product {
 export let products = [];
 
 export function loadProductsFetch() {
-  const promise = fetch(
-    'https://supersimplebackend.dev/products'
-  ).then((response) => {
-    return response.json();
-  }).then((productsData) => {
-    products = productsData.map((productDetails) => {
-      if (productDetails.type === 'clothing') {
-        return new Clothing(productDetails);
-      }
-      return new Product(productDetails);
-    });
+  const promise = fetch("https://supersimplebackend.dev/products")
+    .then((response) => {
+      return response.json();
+    })
+    .then((productsData) => {
+      products = productsData.map((productDetails) => {
+        if (productDetails.type === "clothing") {
+          return new Clothing(productDetails);
+        }
+        return new Product(productDetails);
+      });
 
-    console.log('load products');
-  }).catch((error) => {
-    console.log('Unexpected error. Please try again later.');
-  });
+      console.log("load products");
+    })
+    .catch((error) => {
+      console.log("Unexpected error. Please try again later.");
+    });
 
   return promise;
 }
@@ -83,23 +84,23 @@ export function loadProductsFetch() {
 export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
 
-  xhr.addEventListener('load', () => {
+  xhr.addEventListener("load", () => {
     products = JSON.parse(xhr.response).map((productDetails) => {
-      if (productDetails.type === 'clothing') {
+      if (productDetails.type === "clothing") {
         return new Clothing(productDetails);
       }
       return new Product(productDetails);
     });
 
-    console.log('load products');
+    console.log("load products");
 
     fun();
   });
 
-  xhr.addEventListener('error', (error) => {
-    console.log('Unexpected error. Please try again later.');
+  xhr.addEventListener("error", (error) => {
+    console.log("Unexpected error. Please try again later.");
   });
 
-  xhr.open('GET', 'https://supersimplebackend.dev/products');
+  xhr.open("GET", "https://supersimplebackend.dev/products");
   xhr.send();
 }
