@@ -1,12 +1,14 @@
 import { orders } from "../data/orders.js";
-import { products, loadProducts } from "../data/products.js";
+import { products, loadProductsFetch } from "../data/products.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import formatCurrency from "./utils/money.js";
-import { addToCart } from "../data/cart.js";
+import { cart } from "../data/cart-class.js";
 
 console.log(orders);
 
-loadProducts(renderOrdersPage);
+loadProductsFetch().then(() => {
+  renderOrdersPage();
+});
 
 function renderOrdersPage() {
   let orderPageHTML = "";
@@ -83,7 +85,7 @@ function renderOrdersPage() {
     button.addEventListener("click", () => {
       console.log(button.dataset.detailId);
       const detailId = button.dataset.detailId;
-      addToCart(detailId);
+      cart.addToCart(detailId);
     });
   });
 }
