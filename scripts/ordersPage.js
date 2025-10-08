@@ -1,14 +1,16 @@
-import { orders } from "../data/orders.js";
+import { orders, getOrders } from "../data/orders.js";
 import { products, loadProductsFetch } from "../data/products.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import formatCurrency from "./utils/money.js";
 import { cart } from "../data/cart-class.js";
 
-console.log(orders);
+renderPreps();
 
-loadProductsFetch().then(() => {
+async function renderPreps() {
+  await getOrders();
+  await loadProductsFetch();
   renderOrdersPage();
-});
+}
 
 function renderOrdersPage() {
   let orderPageHTML = "";
@@ -33,7 +35,7 @@ function renderOrdersPage() {
                     ${detailName}
                 </div>
                 <div class="product-delivery-date">
-                    Arriving on: ${dayjs(detail.estimatedDeliveryTime).format("MMMM D")}
+                    Arriving on: ${dayjs(detail.deliveryDate).format("MMMM D")}
                 </div>
                 <div class="product-quantity">
                     Quantity: ${detail.quantity}
@@ -45,7 +47,7 @@ function renderOrdersPage() {
                 </div>
 
                 <div class="product-actions">
-                <a href="tracking.html?orderId=${order.id}&detailProductId=${detail.productId}">
+                <a href="tracking.html?orderId=${order.orderId}&detailProductId=${detail.productId}">
                     <button class="track-package-button button-secondary">
                     Track package
                     </button>
@@ -59,17 +61,17 @@ function renderOrdersPage() {
                 <div class="order-header-left-section">
                 <div class="order-date">
                     <div class="order-header-label">Order Placed:</div>
-                    <div>${dayjs(order.orderTime).format("MMMM D")}</div>
+                    <div>${dayjs(order.placingDate).format("MMMM D")}</div>
                 </div>
                 <div class="order-total">
                     <div class="order-header-label">Total:</div>
-                    <div>$${formatCurrency(order.totalCostCents)}</div>
+                    <div>$${formatCurrency(order.totalPriceCents)}</div>
                 </div>
                 </div>
 
                 <div class="order-header-right-section">
                 <div class="order-header-label">Order ID:</div>
-                <div>${order.id}</div>
+                <div>${order.orderId}</div>
                 </div>
             </div>
 

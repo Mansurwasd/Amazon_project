@@ -1,6 +1,6 @@
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { cart } from "../../data/cart-class.js";
-import { getProduct } from "../../data/products.js";
+import { getProduct, loadProductsFetch } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import {
   deliveryOptions,
@@ -8,12 +8,17 @@ import {
 } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 
+async function prepProducts() {
+  await loadProductsFetch();
+}
+
 export function renderOrderSummary() {
   let cartSummaryHTML = "";
 
+  prepProducts();
+
   cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId;
-
     const matchingProduct = getProduct(productId);
 
     const deliveryOptionId = cartItem.deliveryOptionId;

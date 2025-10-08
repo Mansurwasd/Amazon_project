@@ -1,8 +1,11 @@
+import { v4 as uuidv4 } from "https://cdn.skypack.dev/uuid";
 import { cart } from "../../data/cart-class.js";
 import { getProduct } from "../../data/products.js";
 import { getDeliveryOption } from "../../data/deliveryOptions.js";
 import { formatCurrency } from "../utils/money.js";
 import { addOrder } from "../../data/orders.js";
+
+const date = new Date();
 
 export function renderPaymentSummary() {
   let productPriceCents = 0;
@@ -68,22 +71,44 @@ export function renderPaymentSummary() {
 
   document.querySelector(".js-payment-summary").innerHTML = paymentSummaryHTML;
 
+  let order;
+
+  function configureOrder(items) {
+    let configuredProducts = [];
+
+    items.forEach((item) => {
+      let d = new Date();
+
+      let deliveryDate = d.setDate(
+        d.getDate() + getDeliveryOption(item.deliveryOptionId).deliveryDays,
+      );
+      deliveryDate = new Date(deliveryDate).toISOString();
+
+      configuredProducts.push({
+        productId: item.productId,
+        quantity: item.quantity,
+        deliveryDate: deliveryDate,
+      });
+    });
+
+    order = {
+      userId: "1",
+      orderId: uuidv4(),
+      placingDate: date.toISOString(),
+      totalPriceCents: Math.round(totalCents),
+      products: configuredProducts,
+    };
+    console.log(order);
+    return order;
+  }
+
   document
     .querySelector(".js-place-order")
     .addEventListener("click", async () => {
       try {
-        const response = await fetch("https://supersimplebackend.dev/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cart: cart.cartItems,
-          }),
-        });
+        const order = configureOrder(cart.cartItems);
 
-        const order = await response.json();
-        addOrder(order);
+        await addOrder(order);
       } catch (error) {
         console.log("Unexpected error. Try again later.");
       }

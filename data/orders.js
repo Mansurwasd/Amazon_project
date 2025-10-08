@@ -1,10 +1,19 @@
-export const orders = JSON.parse(localStorage.getItem("orders")) || [];
+export let orders = [];
 
-export function addOrder(order) {
-  orders.unshift(order);
-  saveToStorage();
+export async function addOrder(order) {
+  const response = await fetch("http://127.0.0.1:8000/orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify(order),
+  });
+  let result = await response.json();
+  console.log(result.message);
 }
 
-function saveToStorage() {
-  localStorage.setItem("orders", JSON.stringify(orders));
+export async function getOrders() {
+  const responce = await fetch("http://127.0.0.1:8000/orders");
+  orders = await responce.json();
+  console.log(orders);
 }

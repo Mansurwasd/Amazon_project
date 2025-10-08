@@ -2,7 +2,6 @@ import { formatCurrency } from "../scripts/utils/money.js";
 
 export function getProduct(productId) {
   let matchingProduct;
-
   products.forEach((product) => {
     if (product.id === productId) {
       matchingProduct = product;
@@ -20,7 +19,7 @@ class Product {
   priceCents;
 
   constructor(productDetails) {
-    this.id = productDetails.id;
+    this.id = productDetails.itemId;
     this.image = productDetails.image;
     this.name = productDetails.name;
     this.rating = productDetails.rating;
@@ -60,7 +59,7 @@ class Clothing extends Product {
 export let products = [];
 
 export function loadProductsFetch() {
-  const promise = fetch("https://supersimplebackend.dev/products")
+  const promise = fetch("http://127.0.0.1:8000/items")
     .then((response) => {
       return response.json();
     })
