@@ -1,6 +1,6 @@
 little eccomerce website, having some of the features real amazon has, to practice javascript
-doesnt have db, authorization, any security
-code is very messy
+doesnt have db, authorization, any security,
+code is very messy,
 might return to this project and finish it properly
 --------------------------------------------------------------
 to run, create folder, open in vscode:
