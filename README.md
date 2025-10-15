@@ -19,8 +19,8 @@ install live server in vscode and run it from amazon.html, or use any other way 
 
 Screenshots
 
-![image](readme_images/44.jpg)
-![image](readme_images/45.jpg)
-![image](readme_images/46.jpg)
-![image](readme_images/47.jpg)
-![image](readme_images/48.jpg)
+![image](readme_images/44.PNG)
+![image](readme_images/45.PNG)
+![image](readme_images/46.PNG)
+![image](readme_images/47.PNG)
+![image](readme_images/48.PNG)
